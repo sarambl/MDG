@@ -35,7 +35,7 @@ def utjevning(pct_fylker,std_fylker,stemmetall_fylker,ant_dirm_fylker,its,lnd_pc
 		utjevningsmandater[:,:,it]=mand_fin
 		order_utj[:,:,it]=ordr
 	
-	utjevningsmandater_rett,ordr_rett=utj_mand_fra_fordeling(direktemandater_rett,stemmer_fylker_rett,ant_dirm_fylker, printTV=True,lnd_pct=lnd_pct)
+	utjevningsmandater_rett,ordr_rett=utj_mand_fra_fordeling(direktemandater_rett,stemmer_fylker_rett,ant_dirm_fylker, printTV=False,lnd_pct=lnd_pct)
 	# gir ut:(1) utjevningsmandater(itterasjoner), (2) rekkefølge utjevningsmandater(itterasjoner)
 	# (3) utjevningsmandater (rett fordeling), (4) rekkefølge utjevningsmandater, (5) direktemandater (rett fordeling,
 	# (6) direktemandater (itterasjoner)
@@ -54,7 +54,7 @@ def utj_mand_fra_fordeling(mand_s_dir,stemmer_fylker,ant_dirm_fylker, printTV=Fa
 	st_tall=np.sum(stemmer_fylker, axis=0)#1.4
 	# pct (for å regne ut under og over sperregrensa)
 	pct=st_tall/np.sum(st_tall)*100
-	print(pct)
+	#print(pct)
 	if (len(lnd_pct)>0):
 		pct=lnd_pct
 		st_tall=lnd_pct*np.sum(st_tall)
@@ -137,7 +137,7 @@ def utj_mand_fra_fordeling(mand_s_dir,stemmer_fylker,ant_dirm_fylker, printTV=Fa
 		# Finner index for den største kvotienten:
 		max_ind=np.argmax(just_kvot) # finds the maximum
 		ifylk,ipart=np.unravel_index(just_kvot.argmax(),just_kvot.shape) # finner fylke og parti
-		print(just_kvot[ifylk,ipart])
+		#print(just_kvot[ifylk,ipart])
 		# SJEKKER FOR FEIL:
 		if (just_kvot[ifylk,ipart]==0):
 			print('FEILMELDING: beregningen av mandat nr: ',j,' ga kun null som kvotient')
