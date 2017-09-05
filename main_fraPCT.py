@@ -10,7 +10,7 @@ filen='Fylkesfordelinger5.csv'
 #############################################
 # SKRIV INN ANTALL ITTERASJONER:
 #############################################
-its=100
+its=1
 
 #############################################
 # SKRIV INN NAVN PÅ UTFIL:
@@ -18,7 +18,10 @@ its=100
 filen_ut='uttest2'
 
 
-
+#############################################
+# JUSTER PROSENT MED ØVERSTE LINJE:
+#############################################
+just_pct=True # True eller False: hvis True justerer den pct med øverste linje
 #############################################
 # Evt endre std:
 #############################################
@@ -46,7 +49,38 @@ ind_mdg=partier.index("MDG")
 hele_l=np.asarray(hele_l).astype(np.float)
 
 
+
+################### JUSTERER MED LANDSGJSNITT:
+if (just_pct):
+	pct_fylker_ny=np.copy(pct_fylker)
+	st_tall_lands_dist=np.zeros(pct_fylker.shape)
+	for i in np.arange(len(pct_fylker[:,0])):
+		st_tall_lands_dist[i,:]=pct_fylker[i,:]*st_tall_f[i]/100
+
+	pct_land_gammel=np.sum(st_tall_lands_dist,axis=0)/np.sum(st_tall_lands_dist)*100
+	for i in np.arange(len(pct_fylker[0,:])):
+		pct_fylker_ny[:,i]=pct_fylker[:,i]*hele_l[i]/pct_land_gammel[i]*100
+
+
+	hele_landet_test=np.zeros(pct_fylker.shape)
+	for i in np.arange(len(pct_fylker[:,0])):
+		hele_landet_test[i,:]=pct_fylker_ny[i,:]*st_tall_f[i]/100
+
+	pct_land_test=np.sum(hele_landet_test,axis=0)/np.sum(hele_landet_test)*100
+	
+	pct_fylker=pct_fylker_ny
+
+
+
+
+print(pct_land_test)
+print(hele_l)
+print(pct_land_gammel)
+
+
+
 utjm,ordr,utjm_r,ordr_r, mand_dir_r,mand_dir_its=utjevning(pct_fylker,std_f,st_tall_f,ant_dirm_fylker,its)#,lnd_pct=hele_l)
+
 
 st_tall_pr_fylke=np.zeros(pct_fylker.shape)
 
