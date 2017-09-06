@@ -5,12 +5,12 @@ from utjevning import *
 ############################################
 # SKRIV INN NAVN PÅ FIL FOR Å LESE RESULTATER:
 #############################################
-filen='Fylkesfordelinger5.csv'
+filen='Fylkesfordelinger4.csv'
 
 #############################################
 # SKRIV INN ANTALL ITTERASJONER:
 #############################################
-its=1
+its=10
 
 #############################################
 # SKRIV INN NAVN PÅ UTFIL:
@@ -41,8 +41,10 @@ print('Partier:',partier)
 
 ant_dirm_fylker=np.array([9,17,19,7,7,9,7,6,4,6,14,16,4,9,10,5,9,6,5])-1
 # generate st. dev matrix
-std_f=np.zeros([19,10])
-for i in np.arange(19):
+ant_fylk=len(fylker)
+ant_part=len(partier)
+std_f=np.zeros([ant_fylk,ant_part])
+for i in np.arange(ant_fylk):
 	std_f[i,:]=std
 
 ind_mdg=partier.index("MDG")
@@ -54,28 +56,36 @@ hele_l=np.asarray(hele_l).astype(np.float)
 if (just_pct):
 	pct_fylker_ny=np.copy(pct_fylker)
 	st_tall_lands_dist=np.zeros(pct_fylker.shape)
-	for i in np.arange(len(pct_fylker[:,0])):
+	for i in np.arange(ant_fylk):
 		st_tall_lands_dist[i,:]=pct_fylker[i,:]*st_tall_f[i]/100
-
+	
+	
 	pct_land_gammel=np.sum(st_tall_lands_dist,axis=0)/np.sum(st_tall_lands_dist)*100
-	for i in np.arange(len(pct_fylker[0,:])):
-		pct_fylker_ny[:,i]=pct_fylker[:,i]*hele_l[i]/pct_land_gammel[i]*100
+	st_tall_lands_dist_ny=np.zeros(st_tall_lands_dist.shape)
+	for i in np.arange(ant_part):
+		st_tall_lands_dist_ny[:,i]=st_tall_lands_dist[:,i]*hele_l[i]/pct_land_gammel[i]
+	pct_test=np.zeros(hele_l.shape)
+	for i in np.arange(ant_part):
+		pct_test[i]=np.sum(st_tall_lands_dist_ny[:,i])/np.sum(st_tall_lands_dist_ny)*100
+	
+	for i in np.arange(ant_fylk):
+		pct_fylker_ny[i,:]=st_tall_lands_dist_ny[i,:]/np.sum(st_tall_lands_dist_ny[i,:])
 
-
+	"""
 	hele_landet_test=np.zeros(pct_fylker.shape)
 	for i in np.arange(len(pct_fylker[:,0])):
 		hele_landet_test[i,:]=pct_fylker_ny[i,:]*st_tall_f[i]/100
 
 	pct_land_test=np.sum(hele_landet_test,axis=0)/np.sum(hele_landet_test)*100
+	"""
 	
 	pct_fylker=pct_fylker_ny
+	
 
 
-
-
-print(pct_land_test)
-print(hele_l)
-print(pct_land_gammel)
+	print(pct_test)
+	print(hele_l)
+	print(pct_land_gammel)
 
 
 
@@ -96,17 +106,17 @@ gj_MDG4=np.mean(utjmMDG4,axis=2)
 print('Antall ganger de forskjellige partiene får utjevningsmandat:')
 print(ab0)
 print('Gjennomsnitt utjevningsmandater mdg over 4:')
-for i in np.arange(19):
+for i in np.arange(ant_fylk):
 	print('%18s'%fylker[i], np.rint(100*gj_MDG4[i,:]))#,decimals=1))
 
 print('Gjennomsnitt utjevningsmandater forskjell:')
-for i in np.arange(19):
+for i in np.arange(ant_fylk):
 	print('%18s'%fylker[i], np.rint(100*(gj_MDG4[i,:]-gj[i,:])))#,decimals=1))
 print('DIREKTEMANDATER FOR UPERTURBERT:')
-for i in np.arange(19):
+for i in np.arange(ant_fylk):
 	print('dir: %20s'%fylker[i], mand_dir_r[i,:])
 print('UTJEVNINGSMANDATER FOR UPERTURBERT:')
-for i in np.arange(19):
+for i in np.arange(ant_fylk):
 	print('%20s'%fylker[i], utjm_r[i,:])
 print('Utjevningsmandater UPERTURBERT:')
 print(np.sum(utjm_r, axis=0))
@@ -114,4 +124,4 @@ print('Direktemandat UPERTURBERT')
 print(np.sum(mand_dir_r,axis=0))
 
 
-print_to_file(filen_ut,pct_fylker, st_tall_f, mand_dir_its, utjm, ordr, utjm_r, mand_dir_r, ordr, partier, fylker)
+print_to_file(filen_ut,pct_fylker, st_tall_f, mand_dir_its, utjm, ordr, utjm_r, mand_dir_r, ordr_r, partier, fylker)

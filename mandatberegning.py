@@ -113,39 +113,3 @@ pct=np.array([29.0, 	#ap
 	1.4])		#andre
 
 
-"""
-mand, kvot,st_tall=mandat_fra_pct_fylke(pct, 321000., 17)
-print(mand)
-#print(kvot)
-it_nr=10000	
-std=np.array([2.5,2.7,2.1,1.5,1.9,1.4,1.2,1.2,1.,0.8])
-mand_s,kvot_s,kvot_st=pert_mandatb(pct,std,321000,17,it_nr)
-#print(mand)
-sv_og_mdg=0
-krf_og_mdg=0
-ap_6_mdg_1=0
-for i in np.arange(it_nr):
-	if (mand_s[3,i]>0 and mand_s[7,i]>0):
-		#print(mand_s[:,i])
-		#print('hei')
-		sv_og_mdg+=1
-	if (mand_s[5,i]>0 and mand_s[7,i]>0):
-		krf_og_mdg+=1
-	#if (mand_s[0,i]>5):
-		#print('Ap 6')
-		#print(mand_s[:,i])
-	if (mand_s[0,i]>5 and mand_s[7,i]>0):
-		ap_6_mdg_1+=1
-print('Sv og mdg:')
-print(sv_og_mdg,sv_og_mdg/it_nr)
-print('krf og mdg:')
-print(krf_og_mdg,krf_og_mdg/it_nr)
-print('Ap og mdg:')
-print(ap_6_mdg_1,ap_6_mdg_1/it_nr)
-for i in np.arange(len(mand_s[:,1])):
-	print(partier[i]+': ',(np.nansum(mand_s/mand_s,axis=1)[i]/it_nr),(np.nansum(mand_s,axis=1)[i]/it_nr))
-	#print(np.nansum(mand_s/mand_s,axis=1)[i]/it_nr)
-
-#https://en.wikipedia.org/wiki/Confidence_interval
-#print(mand_s)
-"""
