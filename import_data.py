@@ -106,18 +106,19 @@ def generer_opps_rel(filename1,filename_rel):
 
 def print_to_file(filename,pct, st_tall, ant_dirm_f, utjm_f, ordr, utj_rett, ant_dirm_rett, ordr_rett, partier, fylker):
 	firstLine=[' ']+partier
-	filen_rett=filename+'_rett.csv'
+	filen_rett_utj=filename+'_rett_utj.csv'
 	filen_rett_dir=filename+'_rett_dir.csv'
-	filen_its_ut=filename+'_its_ut.csv'
+	filen_its_utj=filename+'_its_utj.csv'
 	filen_its_dir=filename+'_its_dir.csv'
-	filen_ord=filename+'_ordr.csv'
-	filen_ord=filename+'_rett_ordr.csv'
-	filen_its_ut_gj=filename+'its_ut_gj.csv'
-	initCVSfile(filen_rett,firstLine)
+	filen_its_ord=filename+'_its_ordr.csv'
+	filen_rett_ord=filename+'_rett_ordr.csv'
+	filen_its_ut_gj=filename+'_its_ut_gj.csv'
+	initCVSfile(filen_rett_utj,firstLine)
 	initCVSfile(filen_rett_dir,firstLine)
-	initCVSfile(filen_its_ut,firstLine)
+	initCVSfile(filen_its_utj,firstLine)
 	initCVSfile(filen_its_dir,firstLine)
-	initCVSfile(filen_ord,firstLine)
+	initCVSfile(filen_its_ord,'')
+	initCVSfile(filen_rett_ord,'')
 	ant_its=utjm_f.shape[2]
 	ant_part=utjm_f.shape[1]
 	ant_fylk=utjm_f.shape[0]
@@ -125,31 +126,38 @@ def print_to_file(filename,pct, st_tall, ant_dirm_f, utjm_f, ordr, utj_rett, ant
 	#Regner ut gjennomsnitt:
 	utjm_f_gj=np.mean(utjm_f,axis=2)
 	initCVSfile(filen_its_ut_gj,firstLine)
+	
+	fy_ordr=(np.asarray(ordr_rett[:,0]))
+	par_ordr=(np.asarray(ordr_rett[:,1]))
+	appendLineCVSfile(filen_rett_ord,[fylker[int(i)] for i in fy_ordr])
+	appendLineCVSfile(filen_rett_ord,[partier[int(i)] for i in par_ordr])
 	for f in np.arange(ant_fylk):
 		line1=[fylker[f]]+utj_rett[f,:].tolist()
 		line2=[fylker[f]]+ant_dirm_rett[f,:].tolist()
 		line3=[fylker[f]]+utjm_f_gj[f,:].tolist()
-		appendLineCVSfile(filen_rett, line1)
+		appendLineCVSfile(filen_rett_utj, line1)
 		appendLineCVSfile(filen_rett_dir,line2)
 		appendLineCVSfile(filen_its_ut_gj, line3)
+		# rekkefolge
+		
 	for it in np.arange(ant_its):
 		#print(ordr)
 		ordr_it=(np.asarray(ordr[:,0,it]))
 		#print(ordr_it)
-		appendLineCVSfile(filen_ord,[fylker[int(i)] for i in ordr_it])
+		appendLineCVSfile(filen_its_ord,[fylker[int(i)] for i in ordr_it])
 		ordr_it=np.asarray(ordr[:,1,it])
-		appendLineCVSfile(filen_ord,[partier[int(i)] for i in ordr_it])
+		appendLineCVSfile(filen_its_ord,[partier[int(i)] for i in ordr_it])
 		#appendLineCVSfile(filen_ord,partier[ordr_it])
-		appendLineCVSfile(filen_ord,[' '])
+		appendLineCVSfile(filen_its_ord,[' '])
 		for f in np.arange(ant_fylk):
 			
 			line1=[fylker[f]]+utjm_f[f,:,it].tolist()
 			line2=[fylker[f]]+ant_dirm_f[f,:,it].tolist()
-			appendLineCVSfile(filen_its_ut,line1)
+			appendLineCVSfile(filen_its_utj,line1)
 			appendLineCVSfile(filen_its_dir,line2)
 		
 		appendLineCVSfile(filen_its_dir,[' '])
-		appendLineCVSfile(filen_its_ut,[' '])
+		appendLineCVSfile(filen_its_utj,[' '])
 	
 	
 	
