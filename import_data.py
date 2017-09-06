@@ -12,6 +12,7 @@ import io
 import re
 import csv
 from datetime import datetime
+import csv_to_excel 
 #reload(sys)
 #sys.setdefaultencoding("latin-1")
 ant_fylk=19
@@ -124,7 +125,7 @@ def print_to_file(filename,pct, st_tall, ant_dirm_f, utjm_f, ordr, utj_rett, ant
 	ant_fylk=utjm_f.shape[0]
 
 	#Regner ut gjennomsnitt:
-	utjm_f_gj=np.mean(utjm_f,axis=2)
+	utjm_f_gj=np.mean(utjm_f,axis=2)*100
 	initCVSfile(filen_its_ut_gj,firstLine)
 	
 	fy_ordr=(np.asarray(ordr_rett[:,0]))
@@ -159,6 +160,8 @@ def print_to_file(filename,pct, st_tall, ant_dirm_f, utjm_f, ordr, utj_rett, ant
 		appendLineCVSfile(filen_its_dir,[' '])
 		appendLineCVSfile(filen_its_utj,[' '])
 	
+	files=[filen_its_utj,filen_rett_utj,filen_rett_dir,filen_its_ut_gj, filen_its_dir,filen_rett_ord,filen_its_ord]
+	csv_to_excel.csv_to_excel(files)
 	
 	
 """
